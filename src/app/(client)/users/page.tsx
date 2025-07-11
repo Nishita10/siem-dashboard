@@ -1,10 +1,9 @@
 'use client'
-
 import { useState } from 'react'
-import { 
-  ComputerDesktopIcon, 
-  PlusIcon, 
-  ServerIcon, 
+import {
+  ComputerDesktopIcon,
+  PlusIcon,
+  ServerIcon,
   GlobeAltIcon,
   CpuChipIcon,
   CheckCircleIcon,
@@ -119,12 +118,13 @@ const getOSIcon = (os: string) => {
 export default function AgentsPage() {
   const [agents, setAgents] = useState<Agent[]>(mockAgents)
   const [showAddModal, setShowAddModal] = useState(false)
+  const [expandedAgentId, setExpandedAgentId] = useState<string | null>(null)
 
   const toggleAgentStatus = (agentId: string) => {
-    setAgents(agents.map(agent => 
-      agent.id === agentId ? { 
-        ...agent, 
-        status: agent.status === 'active' ? 'inactive' : 'active' 
+    setAgents(agents.map(agent =>
+      agent.id === agentId ? {
+        ...agent,
+        status: agent.status === 'active' ? 'inactive' : 'active'
       } : agent
     ))
   }
@@ -164,107 +164,98 @@ export default function AgentsPage() {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Agent ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  IP Address
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Operating System
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Last Seen
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Actions
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Agent ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">IP Address</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Operating System</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Last Seen</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {agents.map((agent) => (
-                <tr key={agent.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <tr key={agent.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 group">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 w-8 h-8">
-                        <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                          <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                            {agent.id}
-                          </span>
-                        </div>
+                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">{agent.id}</span>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 mr-3">
-                        {getOSIcon(agent.operatingSystem)}
-                      </div>
+                      <div className="mr-3">{getOSIcon(agent.operatingSystem)}</div>
                       <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
-                          {agent.name}
-                        </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {agent.location}
-                        </div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">{agent.name}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{agent.location}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <GlobeAltIcon className="w-4 h-4 text-gray-400 mr-2" />
-                      <span className="text-sm font-mono text-gray-900 dark:text-white">
-                        {agent.ipAddress}
-                      </span>
+                      <span className="text-sm font-mono text-gray-900 dark:text-white">{agent.ipAddress}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 dark:text-white">
-                      {agent.operatingSystem}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      Version {agent.version}
-                    </div>
+                    <div className="text-sm text-gray-900 dark:text-white">{agent.operatingSystem}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Version {agent.version}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       {getStatusIcon(agent.status)}
-                      <span className={clsx(
-                        'ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full',
-                        getStatusColor(agent.status)
-                      )}>
+                      <span className={clsx('ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full', getStatusColor(agent.status))}>
                         {agent.status.charAt(0).toUpperCase() + agent.status.slice(1)}
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {agent.lastSeen}
-                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{agent.lastSeen}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => toggleAgentStatus(agent.id)}
-                        className={clsx(
-                          'inline-flex items-center px-2 py-1 text-xs font-medium rounded',
-                          agent.status === 'active' 
-                            ? 'text-red-600 hover:text-red-900 dark:text-red-400' 
-                            : 'text-green-600 hover:text-green-900 dark:text-green-400'
-                        )}
-                      >
-                        {agent.status === 'active' ? 'Disable' : 'Enable'}
-                      </button>
-                      <button
-                        onClick={() => deleteAgent(agent.id)}
-                        className="text-red-600 hover:text-red-900 dark:text-red-400"
-                      >
-                        Remove
-                      </button>
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex space-x-2 items-center">
+                        <button
+                          onClick={() => toggleAgentStatus(agent.id)}
+                          className={clsx(
+                            'inline-flex items-center px-2 py-1 text-xs font-medium rounded',
+                            agent.status === 'active' ? 'text-red-600 hover:text-red-900 dark:text-red-400' : 'text-green-600 hover:text-green-900 dark:text-green-400'
+                          )}
+                        >
+                          {agent.status === 'active' ? 'Disable' : 'Enable'}
+                        </button>
+                        <button
+                          onClick={() => deleteAgent(agent.id)}
+                          className="text-red-600 hover:text-red-900 dark:text-red-400"
+                        >
+                          Remove
+                        </button>
+                        <button
+                          onClick={() => setExpandedAgentId(expandedAgentId === agent.id ? null : agent.id)}
+                          className="text-blue-600 hover:text-blue-900 dark:text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        >
+                          View Details
+                        </button>
+                      </div>
+                      {expandedAgentId === agent.id && (
+                        <div className="mt-3 p-3 rounded bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs text-gray-800 dark:text-gray-200">
+                          <div>
+                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">🛡️ Vulnerability Detection</h4>
+                            <ul className="list-disc list-inside ml-4">
+                              <li>Last scan: 2 hours ago</li>
+                              <li>Critical vulnerabilities: 3</li>
+                              <li>High vulnerabilities: 5</li>
+                            </ul>
+                          </div>
+                          <div className="mt-2">
+                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">📦 SCA: Latest Scans</h4>
+                            <ul className="list-disc list-inside ml-4">
+                              <li>Dependencies scanned: 42</li>
+                              <li>Outdated libraries: 7</li>
+                              <li>License issues: None</li>
+                            </ul>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </td>
                 </tr>
